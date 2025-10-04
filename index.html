@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistencia Legal Ruiz de la Cruz - Tarjeta de Presentación Digital</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cormorant Garamond (Serif) & Inter (Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFFFFF">
+
+    <style>
+        /* CSS Custom Properties (Design Tokens) - V9 con enlaces de texto para redes sociales */
+        :root {
+            --bg-base: #FFFFFF;
+            --surface-card: #FFFFFF;
+            --text-primary: #001F3F; /* Azul medianoche */
+            --text-secondary: #2B2B2B; /* Gris carbón */
+            --text-muted: #8B949E; /* Gris medio-claro */
+            --accent-primary: #001F3F; /* Azul medianoche */
+            --accent-prestige: #D4AF37; /* Dorado metálico */
+            --border-color: #F0F0F0; /* Borde extra claro */
+            --state-success: #10B981;
+            --state-error: #EF4444;
+
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            --transition-curve: cubic-bezier(0.2, 0.8, 0.2, 1);
+            --transition-duration: 250ms;
+        }
+
+        /* Base Styles & Background */
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-base);
+            color: var(--text-secondary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+        
+        /* Gradient Border Top con Acento Dorado */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255,255,255,0), var(--accent-prestige), rgba(255,255,255,0));
+            z-index: 100;
+        }
+        
+        /* Fondo Atmosférico Sutil */
+        .atmospheric-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -10;
+        }
+        .atmospheric-bg::after {
+            content: '';
+            position: absolute;
+            width: 100vw;
+            height: 80vh;
+            top: -20vh;
+            left: -20vw;
+            background: radial-gradient(ellipse at center, rgba(160, 174, 192, 0.08) 0%, rgba(255, 255, 255, 0) 60%);
+            -webkit-animation: fadeIn 3s ease-in-out;
+            animation: fadeIn 3s ease-in-out;
+        }
+        @-webkit-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Typography Scale */
+        h1, h2, h3, h4, h5, h6 { color: var(--text-primary); }
+        h1 { font-family: var(--font-serif); }
+        .h1-line-1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .h1-line-2 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Card Component - Nuevo estilo inspirado en la imagen */
+        .card {
+            background-color: var(--surface-card);
+            border-radius: 1.25rem;
+            box-shadow: 
+                /* Sombra exterior suave para elevación */
+                0px 8px 16px rgba(17, 17, 26, 0.05),
+                0px 4px 8px rgba(17, 17, 26, 0.05),
+                /* Sombra interior sutil para efecto de profundidad */
+                inset 0px 1px 1px #fff;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-duration) var(--transition-curve);
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow:
+                /* Sombra exterior más pronunciada en hover */
+                0px 12px 24px rgba(17, 17, 26, 0.08),
+                0px 8px 16px rgba(17, 17, 26, 0.08),
+                 /* Sombra interior sutil para efecto de profundidad */
+                inset 0px 1px 1px #fff;
+        }
+
+        /* Buttons Components */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            padding: 0.9rem 2rem;
+            font-weight: 600;
+            transition: all var(--transition-duration) var(--transition-curve);
+            -webkit-tap-highlight-color: transparent;
+            border: 1px solid transparent;
+        }
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: white;
+            box-shadow: 0 4px 14px rgba(0, 31, 63, 0.15);
+        }
+        .btn-primary:hover, .btn-primary:focus-visible {
+            background-color: #001429; /* Darker Midnight Blue */
+            transform: translateY(-3px);
+            box-shadow: 0 7px 18px rgba(0, 31, 63, 0.2);
+        }
+        .btn-primary:active {
+            transform: translateY(0px);
+        }
+        
+        /* Input Components */
+        .input-field {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 0.75rem;
+            padding: 0.9rem 1.25rem;
+            width: 100%;
+            transition: all var(--transition-duration) var(--transition-curve);
+            font-size: 1rem;
+        }
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background-color: var(--bg-base);
+            box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.1);
+        }
+        .input-field.error {
+            border-color: var(--state-error);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+        
+        /* Social Link Style */
+        .social-link {
+            color: var(--text-secondary);
+            transition: color var(--transition-duration) var(--transition-curve);
+        }
+        .social-link:hover {
+            color: var(--accent-prestige);
+        }
+
+        /* Snackbar Component */
+        #snackbar {
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 500ms var(--transition-curve);
+        }
+        #snackbar.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased overflow-x-hidden p-6 sm:p-8 lg:p-12">
+    
+    <div class="atmospheric-bg"></div>
+
+    <main class="max-w-3xl mx-auto flex flex-col items-center space-y-16 relative z-10">
+        
+        <!-- Hero Section -->
+        <header class="text-center pt-24 lg:pt-32">
+            <h1 class="leading-none">
+                <span class="block h1-line-1">Asistencia Legal</span>
+                <span class="block h1-line-2">Ruiz de la Cruz</span>
+            </h1>
+            <p class="mt-8 max-w-2xl mx-auto text-lg italic" style="color: var(--text-muted);">
+                "Por un Sistema de Justicia que funcione para todos y no sólo para unos Cuántos".
+            </p>
+            <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-5">
+                <a href="#agenda" class="btn btn-primary w-full sm:w-auto">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Agendar Cita
+                </a>
+                <a href="https://wa.me/529711440542?text=Hola,%20quisiera%20solicitar%20asesoría%20legal." target="_blank" rel="noopener noreferrer" class="btn btn-primary w-full sm:w-auto">
+                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.267.655 4.398 1.804 6.166l-1.33 4.864 4.867-1.271z"></path></svg>
+                    Contactar por WhatsApp
+                </a>
+            </div>
+        </header>
+
+        <!-- Formulario de Contacto Inteligente -->
+        <section class="card p-6 sm:p-8 w-full">
+            <h2 class="text-2xl font-bold mb-2">Contacto Directo</h2>
+            <p style="color: var(--text-muted);" class="mb-8">Envíe su consulta y le contactaremos a la brevedad.</p>
+            <form id="contactForm" novalidate class="space-y-6">
+                <div>
+                    <label for="fullName" class="sr-only">Nombre completo</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Nombre completo" class="input-field" required>
+                    <p class="text-red-600 text-sm mt-2 hidden error-message"></p>
+                </div>
+                <div>
+                    <label for="email" class="sr-only">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Email de contacto" class="input-field" required>
+                     <p class="text-red-600 text-sm mt-2 hidden error-message"></p>
+                </div>
+                <div>
+                    <label for="phone" class="sr-only">Teléfono</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Teléfono (+52)" class="input-field" required>
+                     <p class="text-red-600 text-sm mt-2 hidden error-message"></p>
+                </div>
+                <div>
+                    <label for="message" class="sr-only">Mensaje</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Describa brevemente su caso..." class="input-field" required></textarea>
+                     <p class="text-red-600 text-sm mt-2 hidden error-message"></p>
+                </div>
+                <button type="submit" id="submitButton" class="btn btn-primary w-full !mt-8 flex items-center justify-center">
+                    <span id="submitText">Enviar y abrir WhatsApp</span>
+                    <svg id="submitSpinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </form>
+        </section>
+
+        <!-- Agenda Inteligente -->
+        <section id="agenda" class="card w-full mt-16!">
+            <div class="p-6 sm:p-8">
+                 <h2 class="text-2xl font-bold mb-2">Agende su Cita</h2>
+                 <p style="color: var(--text-muted);" class="mb-6">Seleccione una fecha y hora disponible en nuestro calendario.</p>
+            </div>
+            <div class="bg-gray-50/50 rounded-b-2xl overflow-hidden">
+                <iframe src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1AbFySjO36y16FM2wlQEUHtpkxRFrU9yI1TBoMRhNEPF80KKtIDHBDM3UjE24-EOFWQ85zRh8R?gv=true" 
+                style="border: 0" width="100%" height="600" frameborder="0"></iframe>
+            </div>
+        </section>
+
+        <!-- Accesos Rápidos -->
+        <section class="card p-6 sm:p-8 w-full">
+             <h2 class="text-2xl font-bold mb-6">Accesos Rápidos</h2>
+             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <a href="mailto:asistencialegal@ruizdelacruz.com" class="group flex items-center p-4 bg-gray-50 rounded-xl hover:bg-white transition-all duration-200 border border-gray-200 hover:border-gray-300 hover:shadow-md">
+                    <svg class="w-8 h-8 flex-shrink-0 text-gray-400 group-hover:text-accent-prestige transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <span class="ml-4 font-semibold text-gray-800">Email</span>
+                </a>
+                 <a href="https://wa.me/529711440542" target="_blank" rel="noopener noreferrer" class="group flex items-center p-4 bg-gray-50 rounded-xl hover:bg-white transition-all duration-200 border border-gray-200 hover:border-gray-300 hover:shadow-md">
+                    <svg class="w-8 h-8 flex-shrink-0 text-gray-400 group-hover:text-accent-prestige transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.267.655 4.398 1.804 6.166l-1.33 4.864 4.867-1.271z"></path></svg>
+                    <span class="ml-4 font-semibold text-gray-800">WhatsApp</span>
+                </a>
+                 <a href="tel:+529711440542" class="group flex items-center p-4 bg-gray-50 rounded-xl hover:bg-white transition-all duration-200 border border-gray-200 hover:border-gray-300 hover:shadow-md col-span-1 sm:col-span-2">
+                    <svg class="w-8 h-8 flex-shrink-0 text-gray-400 group-hover:text-accent-prestige transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    <span class="ml-4 font-semibold text-gray-800">Realizar una Llamada</span>
+                </a>
+             </div>
+        </section>
+
+        <!-- Redes Sociales -->
+        <section class="card p-6 sm:p-8 w-full">
+             <h2 class="text-2xl font-bold mb-6 text-center">Nuestras Redes Sociales</h2>
+             <div class="flex justify-center items-center space-x-6 sm:space-x-10">
+                <a href="https://www.facebook.com/ja.ruizdelacruz/" target="_blank" rel="noopener noreferrer" class="font-semibold text-lg social-link">
+                    Facebook
+                </a>
+                <a href="https://www.youtube.com/playlist?list=PLksG9rXBn7whj1pxFG-sPPhV1J-VfJ9GQ" target="_blank" rel="noopener noreferrer" class="font-semibold text-lg social-link">
+                    YouTube
+                </a>
+                <a href="https://www.tiktok.com/@joseantoniorccr" target="_blank" rel="noopener noreferrer" class="font-semibold text-lg social-link">
+                    TikTok
+                </a>
+             </div>
+        </section>
+    </main>
+
+    <!-- Snackbar de Confirmación -->
+    <div id="snackbar" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 bg-green-500 text-white py-3 px-6 rounded-lg shadow-lg flex items-center space-x-3 z-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <p class="font-semibold">Mensaje enviado con éxito.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smart Form Handling
+            const form = document.getElementById('contactForm');
+            const inputs = {
+                fullName: form.querySelector('#fullName'),
+                email: form.querySelector('#email'),
+                phone: form.querySelector('#phone'),
+                message: form.querySelector('#message'),
+            };
+            const submitButton = document.getElementById('submitButton');
+            const submitText = document.getElementById('submitText');
+            const submitSpinner = document.getElementById('submitSpinner');
+
+            const phoneMask = (value) => {
+                if (!value) return value;
+                const phoneNumber = value.replace(/[^\d]/g, '');
+                const phoneNumberLength = phoneNumber.length;
+                if (phoneNumberLength < 3) return `+${phoneNumber}`;
+                if (phoneNumberLength < 5) return `+${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2)}`;
+                if (phoneNumberLength < 8) return `+${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2, 5)} ${phoneNumber.slice(5)}`;
+                return `+${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2, 5)} ${phoneNumber.slice(5, 8)} ${phoneNumber.slice(8, 12)}`;
+            };
+
+            inputs.phone.addEventListener('input', (e) => {
+                e.target.value = phoneMask(e.target.value.replace('+52', '52'));
+            });
+
+            const validationRules = {
+                fullName: {
+                    validate: (value) => value.trim().length >= 3,
+                    message: "El nombre es muy corto."
+                },
+                email: {
+                    validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+                    message: "Por favor, ingrese un email válido."
+                },
+                phone: {
+                    validate: (value) => /^\+52\d{10}$/.test(value.replace(/\s/g, '')),
+                    message: "Formato de teléfono debe ser +52 seguido de 10 dígitos."
+                },
+                message: {
+                    validate: (value) => value.trim().length >= 10,
+                    message: "El mensaje debe tener al menos 10 caracteres."
+                }
+            };
+            
+            const showError = (input, message) => {
+                input.classList.add('error');
+                const errorContainer = input.nextElementSibling;
+                errorContainer.textContent = message;
+                errorContainer.classList.remove('hidden');
+            };
+
+            const showSuccess = (input) => {
+                input.classList.remove('error');
+                const errorContainer = input.nextElementSibling;
+                errorContainer.classList.add('hidden');
+            };
+
+            const validateInput = (input) => {
+                const rule = validationRules[input.name];
+                if (rule.validate(input.value)) {
+                    showSuccess(input);
+                    return true;
+                } else {
+                    showError(input, rule.message);
+                    return false;
+                }
+            };
+
+            Object.values(inputs).forEach(input => {
+                input.addEventListener('blur', () => validateInput(input));
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let isFormValid = true;
+                Object.values(inputs).forEach(input => {
+                    if (!validateInput(input)) {
+                        isFormValid = false;
+                    }
+                });
+
+                if (isFormValid) {
+                    submitButton.disabled = true;
+                    submitText.classList.add('hidden');
+                    submitSpinner.classList.remove('hidden');
+                    
+                    const WHATSAPP_NUMBER = "5219711440542";
+                    let messageBody = `*Nueva Consulta desde Tarjeta Digital*\n\n`;
+                    messageBody += `*Nombre:* ${inputs.fullName.value}\n`;
+                    messageBody += `*Email:* ${inputs.email.value}\n`;
+                    messageBody += `*Teléfono:* ${inputs.phone.value}\n\n`;
+                    messageBody += `*Mensaje:*\n${inputs.message.value}`;
+                    
+                    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageBody)}`;
+
+                    setTimeout(() => {
+                        window.open(whatsappUrl, '_blank');
+                        
+                        const snackbar = document.getElementById('snackbar');
+                        snackbar.classList.add('show');
+                        if (navigator.vibrate) {
+                            navigator.vibrate(100);
+                        }
+                        
+                        form.reset();
+                        Object.values(inputs).forEach(input => input.classList.remove('error'));
+                        
+                        submitButton.disabled = false;
+                        submitText.classList.remove('hidden');
+                        submitSpinner.classList.add('hidden');
+
+                        setTimeout(() => {
+                            snackbar.classList.remove('show');
+                        }, 4000);
+
+                    }, 1000);
+                }
+            });
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('SW registered: ', registration);
+                }).catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+            });
+        }
+    </script>
+    
+    <script>
+        const manifest = {
+            "name": "Asistencia Legal Ruiz de la Cruz",
+            "short_name": "Ruiz de la Cruz",
+            "start_url": ".",
+            "display": "standalone",
+            "background_color": "#FFFFFF",
+            "theme_color": "#FFFFFF",
+            "description": "Tarjeta de presentación digital premium.",
+            "icons": [{
+                "src": "https://placehold.co/192x192/001F3F/FFFFFF?text=RLC",
+                "sizes": "192x192",
+                "type": "image/png"
+            }, {
+                "src": "https://placehold.co/512x512/001F3F/FFFFFF?text=RLC",
+                "sizes": "512x512",
+                "type": "image/png"
+            }]
+        };
+        const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        document.querySelector('link[rel="manifest"]').setAttribute('href', manifestURL);
+
+        const swScript = `
+            const CACHE_NAME = 'ruizdelacruz-cache-v9';
+            const urlsToCache = ['/', '/index.html'];
+            self.addEventListener('install', event => {
+                event.waitUntil(
+                    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+                );
+            });
+            self.addEventListener('fetch', event => {
+                event.respondWith(
+                    caches.match(event.request).then(response => response || fetch(event.request))
+                );
+            });
+        `;
+        const swBlob = new Blob([swScript], {type: 'application/javascript'});
+        const swURL = URL.createObjectURL(swBlob);
+    </script>
+</body>
+</html>
+
